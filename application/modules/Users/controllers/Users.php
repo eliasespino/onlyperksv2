@@ -1,15 +1,11 @@
 <?php
 use  \Firebase\JWT\JWT; //namespace in jwt
 class Users extends REST_Controller {
-
-
-
-
     private $secret ;
     public function __construct()
     {
         parent::__construct();
-          $this->load->model('UsersModel');
+        $this->load->model('UsersModel');
           ///Allowing CORS
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, PUT, DELETE, OPTIONS');
@@ -19,21 +15,18 @@ class Users extends REST_Controller {
         $contenido = fread($gestor, filesize($nombre_fichero));
         $this->secret=$contenido;
         fclose($gestor);
+
     }
 
-    public function index_get(){
-
-             $data = $this->UsersModel->getUsers();
+    public function index_get()
+    {
+         $data = $this->UsersModel->getUsers();
      		 $this->response($data,200);
-      
-      
-      
     }
     public function id_get($id)
     {
     		$data = $this->UsersModel->getUser($id);
      		$this->response($data,200);
-
     }
 
     public function token_get()
