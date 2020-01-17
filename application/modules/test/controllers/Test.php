@@ -13,6 +13,6 @@ class Test extends MX_Controller
 	}
     function index()
     {
-
+        echo "hola";
     }
 }

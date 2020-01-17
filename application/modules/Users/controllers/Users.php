@@ -44,45 +44,58 @@ class Users extends REST_Controller {
     public function tokenDecode_post()
     {
         $token=$this->post('token');
-      try 
-        { 
-          $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
-          $output['token'] = $decodejwt;
-          $output['success'] = true;
-          $output['code'] = 200;
-           $this->response($output,200);
-        } 
-        catch (\Firebase\JWT\ExpiredException $e)
-        { 
-              $output['success'] = false;
-              $output['errors'][] = $e->errorMessage();
-              $output['code'] = 401;
-              $this->response($output,401);
-        }
+        try 
+          { 
+            $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
+            $output['token'] = $decodejwt;
+            $output['success'] = true;
+            $output['code'] = 200;
+             $this->response($output,200);
+          } 
+          catch (\Firebase\JWT\ExpiredException $e)
+          { 
+                $output['success'] = false;
+                $output['errors'][] = $e->errorMessage();
+                $output['code'] = 401;
+                $this->response($output,401);
+          }
     }
     public function login_post()
     {
         $user=$this->post('user');
         $pass=hash("sha256",$this->post('pass'));
         $data = $this->UsersModel->login($user,$pass);
-        $this->response($data,200);
+        $user=$data[0];
+        $date = new DateTime();
+        $payload['id']           = $user["id"];
+        $payload['email']        =$user["email"];
+        $payload['first_name']   = $user["first_name"];
+        $payload['last_name']    =   $user["last_name"];
+        $payload['type']         = $user["type"];
+        $payload['iat']          = $date->getTimestamp();
+        $payload['exp']          = $date->getTimestamp() + 60*60;
+        $output['id_token']      = JWT::encode($payload, $this->secret);
+        $this->response($output,200);
+
     }
-    private function isLogin($token)
+    public function isLogin_get()
     {
 
-      try 
-        { 
-          $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
-          $decodejwt;
-          
-        } 
-        catch (\Firebase\JWT\ExpiredException $e)
-        { 
-              $output['success'] = false;
-              $output['errors'][] = $e->errorMessage();
-              $output['code'] = 401;
-              $this->response($output,401);
-        }
+        try 
+          { 
+            //$token=$this->input->get("token");
+            $token = trim(str_replace("Bearer", "", $this->input->get_request_header('Authorization'))  );
+            $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
+           $this->response($decodejwt,200);
+            
+          } 
+          catch (\Firebase\JWT\ExpiredException $e)
+          { 
+                $output['success'] = false;
+                $output['errors'][] = $e->errorMessage();
+                $output['code'] = 401;
+                $this->response($output,401);
+          }
 
     }
 

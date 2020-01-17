@@ -69,6 +69,10 @@ switch (ENVIRONMENT)
 		error_reporting(-1);
 		ini_set('display_errors', 1);
 	break;
+	case 'local':
+		error_reporting(-1);
+		ini_set('display_errors', 1);
+	break;
 	case 'onlyperks':
 		error_reporting(-1);
 		ini_set('display_errors', 1);
