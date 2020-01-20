@@ -28,19 +28,6 @@ class Users extends REST_Controller {
     		$data = $this->UsersModel->getUser($id);
      		$this->response($data,200);
     }
-
-    public function token_get()
-    {
-        // Collect data
-        $date = new DateTime();
-        $payload['id']      = 1;
-        $payload['email']   = "elias@collaborativeperks.com";
-        $payload['name']   = "Elias Espino";
-        $payload['iat']     = $date->getTimestamp();
-        $payload['exp']     = $date->getTimestamp() + 60;
-        $output['id_token'] = JWT::encode($payload, $this->secret);
-        $this->response($output,200);
-    }
     public function tokenDecode_post()
     {
         $token=$this->post('token');
@@ -65,17 +52,26 @@ class Users extends REST_Controller {
         $user=$this->post('user');
         $pass=hash("sha256",$this->post('pass'));
         $data = $this->UsersModel->login($user,$pass);
-        $user=$data[0];
-        $date = new DateTime();
-        $payload['id']           = $user["id"];
-        $payload['email']        =$user["email"];
-        $payload['first_name']   = $user["first_name"];
-        $payload['last_name']    =   $user["last_name"];
-        $payload['type']         = $user["type"];
-        $payload['iat']          = $date->getTimestamp();
-        $payload['exp']          = $date->getTimestamp() + 60*60;
-        $output['id_token']      = JWT::encode($payload, $this->secret);
-        $this->response($output,200);
+        if (count($data)>0)
+        {
+            $user=$data[0];
+            $date = new DateTime();
+            $payload['id']           = $user["id"];
+            $payload['email']        =$user["email"];
+            $payload['first_name']   = $user["first_name"];
+            $payload['last_name']    =   $user["last_name"];
+            $payload['type']         = $user["type"];
+            $payload['iat']          = $date->getTimestamp();
+            $payload['exp']          = $date->getTimestamp() + 60*60;
+            $output['id_token']      = JWT::encode($payload, $this->secret);
+            $this->response($output,200);
+        }
+        else{
+            $output["message"]="Authentication Failed ";
+            $output["error_code"]="401";
+            $this->response($output,401);
+        }
+       
 
     }
     public function isLogin_get()
