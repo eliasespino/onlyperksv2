@@ -1,5 +1,6 @@
 <?php
 use  \Firebase\JWT\JWT; //namespace in jwt
+
 class Users extends REST_Controller {
     private $secret ;
     public function __construct()
@@ -28,25 +29,7 @@ class Users extends REST_Controller {
     		$data = $this->UsersModel->getUser($id);
      		$this->response($data,200);
     }
-    public function tokenDecode_post()
-    {
-        $token=$this->post('token');
-        try 
-          { 
-            $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
-            $output['token'] = $decodejwt;
-            $output['success'] = true;
-            $output['code'] = 200;
-             $this->response($output,200);
-          } 
-          catch (\Firebase\JWT\ExpiredException $e)
-          { 
-                $output['success'] = false;
-                $output['errors'][] = $e->errorMessage();
-                $output['code'] = 401;
-                $this->response($output,401);
-          }
-    }
+
     public function login_post()
     {
         $user=$this->post('user');
@@ -57,9 +40,9 @@ class Users extends REST_Controller {
             $user=$data[0];
             $date = new DateTime();
             $payload['id']           = $user["id"];
-            $payload['email']        =$user["email"];
+            $payload['email']        = $user["email"];
             $payload['first_name']   = $user["first_name"];
-            $payload['last_name']    =   $user["last_name"];
+            $payload['last_name']    = $user["last_name"];
             $payload['type']         = $user["type"];
             $payload['iat']          = $date->getTimestamp();
             $payload['exp']          = $date->getTimestamp() + 60*60;
@@ -76,7 +59,6 @@ class Users extends REST_Controller {
     }
     public function isLogin_get()
     {
-
         try 
           { 
             //$token=$this->input->get("token");
@@ -87,12 +69,81 @@ class Users extends REST_Controller {
           } 
           catch (\Firebase\JWT\ExpiredException $e)
           { 
-                $output['success'] = false;
-                $output['errors'][] = $e->errorMessage();
+                $output['message'][] = $e->errorMessage();
                 $output['code'] = 401;
                 $this->response($output,401);
           }
 
+    }
+
+    private function checkToken($token)
+    {
+        $tokenClean=trim(str_replace("Bearer", "", $token ));
+        try
+        {
+               $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
+               return true;
+        }
+        catch(\Firebase\JWT\ExpiredException $e)
+        {
+              return false;
+        }
+    }
+    private function decodeToken($token)
+    {
+         try 
+          { 
+            $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
+           
+             return $decodejwt;
+          } 
+          catch (\Firebase\JWT\ExpiredException $e)
+          { 
+                  $output=array();
+                  return $output;
+
+          }
+    }
+    public function requestPassword_post()
+    {
+        $email=$this->input->post("email");
+        if ($this->UsersModel->emailIsValid($email)) {
+           $date = new DateTime();
+            $payload['email']        = $email;
+            $payload['iat']          = $date->getTimestamp();
+            $payload['exp']          = $date->getTimestamp() + 60*60;
+            $output['token']         = JWT::encode($payload, $this->secret);
+            $this->response($output,200);
+        }
+        else
+        {
+             $data["message"]="Invalid Email";
+             $data["code"]=401;
+              $this->response($data,401);
+        }
+      
+   
+    }
+    public function forgotPassword_post()
+    {
+        $token=$this->input->post("token");
+        $password=hash("sha256",$this->input->post('password'));
+        $tokenData=$this->decodeToken($token);
+        if (!empty($tokenData))
+        {
+            if ($this->UsersModel->changePassword($tokenData["email"],$password))
+            {
+                $data["message"]="Password Changed";
+                $data["code"]=200;
+                $this->response($data,200);
+            }
+            else
+            {
+                $data["message"]="Error trying to change password";
+                $data["code"]=401;
+                $this->response($data,401);
+            }
+        }
     }
 
 }
