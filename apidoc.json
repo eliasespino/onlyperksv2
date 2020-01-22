@@ -1,0 +1,8 @@
+{
+  "name": "onlyperks",
+  "version": "0.1.0",
+  "description": "Collaborativeperks API Docs",
+  "apidoc": {
+    "title": "collaborative.onlyperks.com",
+    "url" : "http://onlyperks.com"}
+}

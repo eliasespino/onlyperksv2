@@ -16,6 +16,7 @@ class Users extends REST_Controller {
         $contenido = fread($gestor, filesize($nombre_fichero));
         $this->secret=$contenido;
         fclose($gestor);
+        $this->load->helpers(array('Mailing'));
 
     }
 
@@ -29,7 +30,18 @@ class Users extends REST_Controller {
     		$data = $this->UsersModel->getUser($id);
      		$this->response($data,200);
     }
-
+    /**
+       * @api {post} /login login into api
+       * @apiName login
+       * @apiGroup Users
+       *
+       * @apiParam user username required.
+       *
+       * @apiParam pass  password required.
+       *
+       * @apiSuccess {json} Results login information.
+       * @apiError {json} Results Failed information.
+       */
     public function login_post()
     {
         $user=$this->post('user');
@@ -46,7 +58,9 @@ class Users extends REST_Controller {
             $payload['type']         = $user["type"];
             $payload['iat']          = $date->getTimestamp();
             $payload['exp']          = $date->getTimestamp() + 60*60;
-            $output['id_token']      = JWT::encode($payload, $this->secret);
+            $output["code"]          = 200;
+            $output['token']         = JWT::encode($payload, $this->secret);
+            $output["data"]          = array('user'=>$user);
             $this->response($output,200);
         }
         else{
@@ -113,7 +127,18 @@ class Users extends REST_Controller {
             $payload['iat']          = $date->getTimestamp();
             $payload['exp']          = $date->getTimestamp() + 60*60;
             $output['token']         = JWT::encode($payload, $this->secret);
-            $this->response($output,200);
+            $url=site_url('Users/forgotPassword?token='.$output['token']);
+            $r["message"]="Mail sent";
+            
+            $r["code"]=200;
+            $sender= new Mailing();
+            $correo= new stdClass;
+            $correo->from= "info@collaborativeperks.com";
+            $correo->to= $email;
+            $correo->subject="Reset Password";
+            $correo->message=$url;
+            $r["data"]=array("mailResponse"=>$sender->send($correo));
+            $this->response($r,200);
         }
         else
         {
@@ -126,7 +151,7 @@ class Users extends REST_Controller {
     }
     public function forgotPassword_post()
     {
-        $token=$this->input->post("token");
+        $token=$this->input->get("token");
         $password=hash("sha256",$this->input->post('password'));
         $tokenData=$this->decodeToken($token);
         if (!empty($tokenData))
@@ -134,6 +159,7 @@ class Users extends REST_Controller {
             if ($this->UsersModel->changePassword($tokenData["email"],$password))
             {
                 $data["message"]="Password Changed";
+                $data["data"]=array();
                 $data["code"]=200;
                 $this->response($data,200);
             }
