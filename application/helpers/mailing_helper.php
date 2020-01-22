@@ -8,7 +8,7 @@ class Mailing
 
 public function send($mail)
 	{
-		$ci =& get_instance();
+			$ci =& get_instance();
 	
 		$ci->load->library('email');
 		$ci->email->initialize(array(
@@ -22,8 +22,16 @@ public function send($mail)
 		));
 		$ci->email->from($mail->from);
 		$ci->email->to($mail->to);
+		$ci->email->set_mailtype("html");
 		$ci->email->subject($mail->subject);
-		$ci->email->message($mail->message);
+		$filename=APPPATH.'/assets/logo.png';
+		$ci->email->attach($filename, 'inline');
+		$cid = $ci->email->attachment_cid($filename);
+		 $url=site_url('Users/forgotPassword?token='.$mail->token);
+		 $data["url"]     	= 	$url;
+		 $data["cid"]		=	$cid;
+		$content= $ci->load->view("forgotpassword",$data,true);
+		$ci->email->message($content);
 		$ci->email->send();
 		return $ci->email->print_debugger();
 	}

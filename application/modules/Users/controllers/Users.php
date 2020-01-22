@@ -121,6 +121,7 @@ class Users extends REST_Controller {
     public function requestPassword_post()
     {
         $email=$this->input->post("email");
+        $ci =& get_instance();
         if ($this->UsersModel->emailIsValid($email)) {
            $date = new DateTime();
             $payload['email']        = $email;
@@ -129,22 +130,21 @@ class Users extends REST_Controller {
             $output['token']         = JWT::encode($payload, $this->secret);
             $url=site_url('Users/forgotPassword?token='.$output['token']);
             $r["message"]="Mail sent";
-            
             $r["code"]=200;
-            $sender= new Mailing();
-            $correo= new stdClass;
-            $correo->from= "info@collaborativeperks.com";
-            $correo->to= $email;
-            $correo->subject="Reset Password";
-            $correo->message=$url;
-            $r["data"]=array("mailResponse"=>$sender->send($correo));
+           $sender           = new Mailing();
+            $correo           = new stdClass;
+            $correo->from     = "info@collaborativeperks.com";
+            $correo->to       = $email;
+            $correo->subject  = "Reset Password";
+            $correo->token = $output['token']  ;
+            $r["data"]        = array("mailResponse"=>$sender->send($correo));
             $this->response($r,200);
         }
         else
         {
-             $data["message"]="Invalid Email";
-             $data["code"]=401;
-              $this->response($data,401);
+             $data["message"] = "Invalid Email";
+             $data["code"]    = 401;
+             $this->response($data,401);
         }
       
    
@@ -170,6 +170,11 @@ class Users extends REST_Controller {
                 $this->response($data,401);
             }
         }
+    }
+
+    public function test_get()
+    {
+      $this->response(APPPATH,200);
     }
 
 }
