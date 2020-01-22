@@ -288,7 +288,7 @@
 	<tr>
 		<td style="padding-bottom: 40px; font-family: 'Open Sans', 'Roboto', 'Segoe UI', Arial, sans-serif; text-align: center" class="text-xs-center">
 			<h3 style="margin: 0; font-size: 18px; line-height: 30px; color: #696969; font-weight: 300; white-space: normal; word-break: break-word;">
-			Elias
+			<?php echo $name;?>
 			</h3>
 		</td>
 	</tr>

@@ -128,16 +128,17 @@ class Users extends REST_Controller {
             $payload['iat']          = $date->getTimestamp();
             $payload['exp']          = $date->getTimestamp() + 60*60;
             $output['token']         = JWT::encode($payload, $this->secret);
-            $url=site_url('Users/forgotPassword?token='.$output['token']);
-            $r["message"]="Mail sent";
-            $r["code"]=200;
-           $sender           = new Mailing();
-            $correo           = new stdClass;
-            $correo->from     = "info@collaborativeperks.com";
-            $correo->to       = $email;
-            $correo->subject  = "Reset Password";
-            $correo->token = $output['token']  ;
-            $r["data"]        = array("mailResponse"=>$sender->send($correo));
+            $site_url                = site_url('Users/forgotPassword?token='.$output['token']);
+            $r["message"]            = "Mail sent";
+            $r["code"]               = 200;
+            $sender                  = new Mailing();
+            $correo                  = new stdClass;
+            $correo->from            = "info@collaborativeperks.com";
+            $correo->to              = $email;
+            $correo->subject         = "Reset Password";
+            $correo->name            = $this->getNameByEmail($email);
+            $correo->token           = $output['token']  ;
+            $r["data"]               = array("mailResponse"=>$sender->send($correo));
             $this->response($r,200);
         }
         else
@@ -172,9 +173,10 @@ class Users extends REST_Controller {
         }
     }
 
-    public function test_get()
+    private function getNameByEmail($email)
     {
-      $this->response(APPPATH,200);
+      $user= $this->UsersModel->getNameByEmail($email);
+     return $user[0]["first_name"] ;
     }
 
 }

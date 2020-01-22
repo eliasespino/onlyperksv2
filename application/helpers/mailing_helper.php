@@ -30,6 +30,7 @@ public function send($mail)
 		 $url=site_url('Users/forgotPassword?token='.$mail->token);
 		 $data["url"]     	= 	$url;
 		 $data["cid"]		=	$cid;
+		 $data["name"]		=	$mail->name;
 		$content= $ci->load->view("forgotpassword",$data,true);
 		$ci->email->message($content);
 		$ci->email->send();

@@ -61,6 +61,13 @@ class UsersModel extends CI_Model {
     }
 
   }
-
+  function getNameByEmail($email)
+  {
+    $this->db->select('*');
+    $q=$this->db->get_where('core_user', array('email' => $email));
+    $response = $q->result_array();
+    return $response;
+   
+  }
 
 }
