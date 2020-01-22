@@ -121,7 +121,7 @@ class Users extends REST_Controller {
     public function requestPassword_post()
     {
         $email=$this->input->post("email");
-        if ($this->UsersModel->emailIsValid($email)) {
+      /* if ($this->UsersModel->emailIsValid($email)) {
            $date = new DateTime();
             $payload['email']        = $email;
             $payload['iat']          = $date->getTimestamp();
@@ -147,7 +147,10 @@ class Users extends REST_Controller {
               $this->response($data,401);
         }
       
-   
+   */
+       $r= $this->UsersModel->emailIsValid($email);
+        $this->response($r,200);
+
     }
     public function forgotPassword_post()
     {

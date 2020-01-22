@@ -25,7 +25,6 @@ class UsersModel extends CI_Model {
   function login($user,$pass)
   {
     $this->db->select('*');
-    $q = $this->db->get('core_user');
     $q=$this->db->get_where('core_user', array('email' => $user,'password'=>$pass));
     $response = $q->result_array();
     return $response;
@@ -37,14 +36,7 @@ class UsersModel extends CI_Model {
     $q = $this->db->get('core_user');
     $q=$this->db->get_where('core_user', array('email' => $user));
     $response = $q->result_array();
-    if (count($response)>0)
-    {
-      return true;
-    }
-    else
-    {
-      return false ;
-    }
+return $response;
     
   }
   function changePassword($email,$password)
