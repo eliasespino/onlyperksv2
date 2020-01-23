@@ -274,10 +274,11 @@ class Users extends REST_Controller {
     }
        /**
        * @api {post} /Users/forgotPassword/ Request user password
-       * @apiName requestPassword_post
+       * @apiName forgotPassword
        * @apiGroup Users
        *
-       * @apiParam email  User's emails.
+       * @apiParam token  bear token.
+       * @apiParam password  new password.
        *
        *
        * @apiSuccessExample {json} Success-Response:
