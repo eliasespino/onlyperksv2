@@ -136,6 +136,50 @@ class Users extends REST_Controller {
        * @apiParam pass  password required.
        *
        * @apiSuccess {json} Results login information.
+       * @apiSuccessExample Success-Response:
+       *     HTTP/1.1 200 OK
+       *     {
+       *       "code": "200",
+       *       "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9d.eyJpZCI6IjEyMyIsImVtYWlsIjoiZWxpYXNAY29sbGFib3JhdGl2ZXBlcmtzLmNvbSIsImZpcnN0X25hbWUiOiJFbGlhcyIsImxhc3RfbmFtZSI6ImVzcGlubyIsInR5cGUiOiJhZG1pbiIsImlhdCI6MTU3OTc3MzI2NywiZXhwIjoxNTc5Nzc2ODY3fQ.4MYQ8KlLXhO1ajpIdE7pAEiVV5F0-ZMQIFyiv6cE9zQ0",
+       *       "data": {
+       *             "user":[
+       *                {
+       *                    "id": "88",
+       *                     "created": "2019-11-29 14:14:30",
+       *                     "modified": "2020-01-23 10:38:15",
+       *                     "first_name": "Pepito",
+       *                     "last_name": "De los palotes",
+       *                     "emp_number": null,
+       *                     "dob": "1965-01-01",
+       *                     "prefix_telephone": "34",
+       *                     "telephone": "682663120",
+       *                     "workphone": null,
+       *                     "username": "pepito_collaborativeperks_com",
+       *                     "password": "13ab622eda738da765d87cbac52b9e54bf7e4080572efb4fdc445fc6d23b8f61",
+       *                     "email": "pepito@collaborativeperks.com",
+       *                     "address": "",
+       *                     "gender": "man",
+       *                     "type": "user",
+       *                     "is_paid": null,
+       *                     "is_active": "1",
+       *                     "is_delete": "0",
+       *                     "is_sms_verified": "1",
+       *                     "is_whatsapp_user": "1",
+       *                     "is_subscribed_newsletter": "1",
+       *                     "is_cookie": "1",
+       *                     "expiration_date": null,
+       *                     "about_me": "",
+       *                     "platform_language": "149",
+       *                     "place_id": null,
+       *                     "company_id": null,
+       *                     "subsidiary": null,
+       *                     "is_promoted": "0",
+       *                     "newsletter_frequency": "all",
+       *                     "country_name": "Spain"
+       *                }
+       *              ]   
+       *          }  
+       *     }
        * @apiError {json} Results Failed information.
        */
     public function login_post()
