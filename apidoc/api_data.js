@@ -1,7 +1,7 @@
 define({ "api": [
   {
     "type": "get",
-    "url": "/Users/id/",
+    "url": "/Users/id/:id",
     "title": "Get  user information",
     "name": "id",
     "group": "Users",
@@ -13,6 +13,61 @@ define({ "api": [
             "optional": false,
             "field": "id",
             "description": "<p>id user required.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "Results",
+            "description": "<p>login information.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"200\",\n  \"message\": \"OK\",\n  \"data\": {\n        \"user\":[\n           {\n               \"id\": \"88\",\n                \"created\": \"2019-11-29 14:14:30\",\n                \"modified\": \"2020-01-23 10:38:15\",\n                \"first_name\": \"Pepito\",\n                \"last_name\": \"De los palotes\",\n                \"emp_number\": null,\n                \"dob\": \"1965-01-01\",\n                \"prefix_telephone\": \"34\",\n                \"telephone\": \"682663120\",\n                \"workphone\": null,\n                \"username\": \"pepito_collaborativeperks_com\",\n                \"password\": \"13ab622eda738da765d87cbac52b9e54bf7e4080572efb4fdc445fc6d23b8f61\",\n                \"email\": \"pepito@collaborativeperks.com\",\n                \"address\": \"\",\n                \"gender\": \"man\",\n                \"type\": \"user\",\n                \"is_paid\": null,\n                \"is_active\": \"1\",\n                \"is_delete\": \"0\",\n                \"is_sms_verified\": \"1\",\n                \"is_whatsapp_user\": \"1\",\n                \"is_subscribed_newsletter\": \"1\",\n                \"is_cookie\": \"1\",\n                \"expiration_date\": null,\n                \"about_me\": \"\",\n                \"platform_language\": \"149\",\n                \"place_id\": null,\n                \"company_id\": null,\n                \"subsidiary\": null,\n                \"is_promoted\": \"0\",\n                \"newsletter_frequency\": \"all\",\n                \"country_name\": \"Spain\"\n           }\n         ]   \n     }  \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "Results",
+            "description": "<p>Failed information.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/modules/Users/controllers/Users.php",
+    "groupTitle": "Users"
+  },
+  {
+    "type": "post",
+    "url": "/Users/requestPassword_post/",
+    "title": "Get  user information",
+    "name": "id",
+    "group": "Users",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "email",
+            "description": "<p>User's emails.</p>"
           }
         ]
       }

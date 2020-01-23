@@ -25,7 +25,7 @@ class Users extends REST_Controller {
           
     }
        /**
-       * @api {get} /Users/id/ Get  user information
+       * @api {get} /Users/id/:id Get  user information
        * @apiName id
        * @apiGroup Users
        *
@@ -33,6 +33,52 @@ class Users extends REST_Controller {
        *
        *
        * @apiSuccess {json} Results login information.
+       *
+       * @apiSuccessExample Success-Response:
+       *     HTTP/1.1 200 OK
+       *     {
+       *       "code": "200",
+       *       "message": "OK",
+       *       "data": {
+       *             "user":[
+       *                {
+       *                    "id": "88",
+       *                     "created": "2019-11-29 14:14:30",
+       *                     "modified": "2020-01-23 10:38:15",
+       *                     "first_name": "Pepito",
+       *                     "last_name": "De los palotes",
+       *                     "emp_number": null,
+       *                     "dob": "1965-01-01",
+       *                     "prefix_telephone": "34",
+       *                     "telephone": "682663120",
+       *                     "workphone": null,
+       *                     "username": "pepito_collaborativeperks_com",
+       *                     "password": "13ab622eda738da765d87cbac52b9e54bf7e4080572efb4fdc445fc6d23b8f61",
+       *                     "email": "pepito@collaborativeperks.com",
+       *                     "address": "",
+       *                     "gender": "man",
+       *                     "type": "user",
+       *                     "is_paid": null,
+       *                     "is_active": "1",
+       *                     "is_delete": "0",
+       *                     "is_sms_verified": "1",
+       *                     "is_whatsapp_user": "1",
+       *                     "is_subscribed_newsletter": "1",
+       *                     "is_cookie": "1",
+       *                     "expiration_date": null,
+       *                     "about_me": "",
+       *                     "platform_language": "149",
+       *                     "place_id": null,
+       *                     "company_id": null,
+       *                     "subsidiary": null,
+       *                     "is_promoted": "0",
+       *                     "newsletter_frequency": "all",
+       *                     "country_name": "Spain"
+       *                }
+       *              ]   
+       *          }  
+       *     }
+       *
        * @apiError {json} Results Failed information.
        */
     public function id_get($id)
@@ -43,8 +89,7 @@ class Users extends REST_Controller {
             $user                    = $this->UsersModel->getUser($id);
             if (count($user)>0)
             {
-            
-             $output["code"]          = 200;
+            $output["code"]          = 200;
             $output["message"]       = "OK";
             $output["data"]          = array('user'=>$user);
             $this->response($output,200);
@@ -124,6 +169,17 @@ class Users extends REST_Controller {
           }
 
     }
+     /**
+       * @api {post} /Users/requestPassword_post/ Get  user information
+       * @apiName id
+       * @apiGroup Users
+       *
+       * @apiParam email  User's emails.
+       *
+       *
+       * @apiSuccess {json} Results login information.
+       * @apiError {json} Results Failed information.
+       */
     public function requestPassword_post()
     {
         $email=$this->input->post("email");
