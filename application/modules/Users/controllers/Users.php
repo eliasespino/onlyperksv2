@@ -277,7 +277,7 @@ class Users extends REST_Controller {
        * @apiName forgotPassword
        * @apiGroup Users
        *
-       * @apiParam token  bear token.
+       * @apiParam token  bearer token.
        * @apiParam password  new password.
        *
        *

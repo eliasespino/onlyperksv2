@@ -12,7 +12,7 @@
             "group": "Parameter",
             "optional": false,
             "field": "token",
-            "description": "<p>bear token.</p>"
+            "description": "<p>bearer token.</p>"
           },
           {
             "group": "Parameter",
