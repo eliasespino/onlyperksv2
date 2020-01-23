@@ -1,5 +1,55 @@
 [
   {
+    "type": "post",
+    "url": "/Users/forgotPassword/",
+    "title": "reset user password",
+    "name": "forgotPassword",
+    "group": "Users",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "token",
+            "description": "<p>bear token.</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "password",
+            "description": "<p>new password.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"message\": \"Password Changed\",\n  \"code\": \"200\",\n  \"data\": {}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "Results",
+            "description": "<p>Failed information.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/modules/Users/controllers/Users.php",
+    "groupTitle": "Users"
+  },
+  {
     "type": "get",
     "url": "/Users/id/:id",
     "title": "Get  user information",
@@ -165,50 +215,6 @@
           }
         ]
       }
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "type": "json",
-            "optional": false,
-            "field": "Results",
-            "description": "<p>Failed information.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/modules/Users/controllers/Users.php",
-    "groupTitle": "Users"
-  },
-  {
-    "type": "post",
-    "url": "/Users/forgotPassword/",
-    "title": "Request user password",
-    "name": "requestPassword_post",
-    "group": "Users",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "optional": false,
-            "field": "email",
-            "description": "<p>User's emails.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"message\": \"Password Changed\",\n  \"code\": \"200\",\n  \"data\": {}",
-          "type": "json"
-        }
-      ]
     },
     "error": {
       "fields": {
