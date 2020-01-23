@@ -32,7 +32,7 @@ class Users extends REST_Controller {
        * @apiParam id  id user required.
        *
        *
-       * @apiSuccess {json} Results login information.
+       * @apiSuccess {json} Results user information.
        *
        * @apiSuccessExample Success-Response:
        *     HTTP/1.1 200 OK
@@ -79,7 +79,23 @@ class Users extends REST_Controller {
        *          }  
        *     }
        *
-       * @apiError {json} Results Failed information.
+       * @apiSuccess (Success 204){json} Results User empty.
+       * @apiSuccessExample No Content-Response:
+       *     HTTP/1.1 204 No Content
+       *     {
+       *       "code": "204",
+       *       "message": "No Content",
+       *       "data": {}
+       *     }
+       * @apiError Users/id 404 userid The id of the User was not found.
+       *
+       * @apiErrorExample Error-Response:
+       *     HTTP/1.1 404 Not Found
+       *     {
+       *       "code": "404",
+       *       "message": "Not Found"
+       *       "data": "{}"
+       *     }
        */
     public function id_get($id)
     {
@@ -111,7 +127,7 @@ class Users extends REST_Controller {
 
     }
     /**
-       * @api {post} /login login into api
+       * @api {post} Users/login Login into api
        * @apiName login
        * @apiGroup Users
        *
