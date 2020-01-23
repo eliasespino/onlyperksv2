@@ -230,8 +230,8 @@ class Users extends REST_Controller {
 
     }
      /**
-       * @api {post} /Users/requestPassword_post/ Get  user information
-       * @apiName id
+       * @api {post} /Users/requestPassword/ Request user password
+       * @apiName requestPassword_post
        * @apiGroup Users
        *
        * @apiParam email  User's emails.
@@ -272,6 +272,23 @@ class Users extends REST_Controller {
       
    
     }
+       /**
+       * @api {post} /Users/forgotPassword/ Request user password
+       * @apiName requestPassword_post
+       * @apiGroup Users
+       *
+       * @apiParam email  User's emails.
+       *
+       *
+       * @apiSuccessExample {json} Success-Response:
+       *     HTTP/1.1 200 OK
+       *     {
+       *       "message": "Password Changed",
+       *       "code": "200",
+       *       "data": {}
+       *    
+       * @apiError {json} Results Failed information.
+       */
     public function forgotPassword_post()
     {
         $token=$this->input->get("token");
