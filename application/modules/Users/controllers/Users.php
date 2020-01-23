@@ -22,13 +22,48 @@ class Users extends REST_Controller {
 
     public function index_get()
     {
-         $data = $this->UsersModel->getUsers();
-     		 $this->response($data,200);
+          
     }
+       /**
+       * @api {get} /Users/id/ Get  user information
+       * @apiName id
+       * @apiGroup Users
+       *
+       * @apiParam id  id user required.
+       *
+       *
+       * @apiSuccess {json} Results login information.
+       * @apiError {json} Results Failed information.
+       */
     public function id_get($id)
     {
-    		$data = $this->UsersModel->getUser($id);
-     		$this->response($data,200);
+        $token = trim(str_replace("Bearer", "", $this->input->get_request_header('Authorization'))  );
+        if ($this->checkToken($token)==true)
+        {
+            $user                    = $this->UsersModel->getUser($id);
+            if (count($user)>0)
+            {
+            
+             $output["code"]          = 200;
+            $output["message"]       = "OK";
+            $output["data"]          = array('user'=>$user);
+            $this->response($output,200);
+            }
+            else
+            {
+            $output["code"]          = 204;
+            $output["message"]       = "No Content";
+            $output["data"]          = array('user'=>$user);
+            $this->response($output,204);
+            }
+            
+        }
+        else
+        {
+            $data = $this->UsersModel->getUser($id);
+            $this->response($data,401);
+        }
+
     }
     /**
        * @api {post} /login login into api
@@ -89,35 +124,6 @@ class Users extends REST_Controller {
           }
 
     }
-
-    private function checkToken($token)
-    {
-        $tokenClean=trim(str_replace("Bearer", "", $token ));
-        try
-        {
-               $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
-               return true;
-        }
-        catch(\Firebase\JWT\ExpiredException $e)
-        {
-              return false;
-        }
-    }
-    private function decodeToken($token)
-    {
-         try 
-          { 
-            $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
-           
-             return $decodejwt;
-          } 
-          catch (\Firebase\JWT\ExpiredException $e)
-          { 
-                  $output=array();
-                  return $output;
-
-          }
-    }
     public function requestPassword_post()
     {
         $email=$this->input->post("email");
@@ -172,11 +178,39 @@ class Users extends REST_Controller {
             }
         }
     }
+/*Funciones  de apoyo */
+
 
     private function getNameByEmail($email)
     {
       $user= $this->UsersModel->getNameByEmail($email);
      return $user[0]["first_name"] ;
     }
+    private function decodeToken($token)
+    {
+         try 
+          { 
+            $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
+           
+             return $decodejwt;
+          } 
+          catch (\Firebase\JWT\ExpiredException $e)
+          { 
+                  $output=array();
+                  return $output;
 
+          }
+    }
+    private function checkToken($token)
+    {
+        try
+        {
+               $decodejwt = (array) JWT::decode($token, $this->secret, array('HS256'));
+               return true;
+        }
+        catch(\Firebase\JWT\ExpiredException $e)
+        {
+              return false;
+        }
+    }
 }

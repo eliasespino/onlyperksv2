@@ -16,7 +16,6 @@ class UsersModel extends CI_Model {
   {
     $response = array();
     $this->db->select('*');
-    $q = $this->db->get('core_user');
     $q=$this->db->get_where('core_user', array('id' => $id));
     $response = $q->result_array();
     return $response;

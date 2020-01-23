@@ -1,5 +1,53 @@
 define({ "api": [
   {
+    "type": "get",
+    "url": "/Users/id/",
+    "title": "Get  user information",
+    "name": "id",
+    "group": "Users",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "id",
+            "description": "<p>id user required.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "Results",
+            "description": "<p>login information.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "Results",
+            "description": "<p>Failed information.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/modules/Users/controllers/Users.php",
+    "groupTitle": "Users"
+  },
+  {
     "type": "post",
     "url": "/login",
     "title": "login into api",
