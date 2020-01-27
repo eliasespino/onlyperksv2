@@ -13,6 +13,8 @@ class Test extends MX_Controller
 	}
     function index()
     {
-        echo "hola";
+      $email="elias@collaborativeperks.com";
+      $partes=explode("@", $email);
+      var_dump($partes);
     }
 }

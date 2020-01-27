@@ -22,7 +22,8 @@ class Users extends REST_Controller {
 
     public function index_get()
     {
-          
+         $r= $this->checkEmail('elias@collaborativeperks.com');
+         $this->response($r,200);
     }
        /**
        * @api {get} /Users/id/:id Get  user information
@@ -312,8 +313,41 @@ class Users extends REST_Controller {
             }
         }
     }
-/*Funciones  de apoyo */
+    public function register_post()
+    {
+      $user                                  = new stdClass;
+      $user->username                        = $this->emailToUsername($this->input->post("email"));
+      $user->email                           = $this->input->post("email");
+      $user->first_name                      = $this->input->post("first_name");
+      $user->last_name                       = $this->input->post("last_name");
+      $user->gender                          = $this->input->post("gender");
+      $user->platform_language               = $this->input->post("platform_language");
+      $user->password                        = hash("sha256",$this->input->post("password"));
+      $user->type                            = "user";
+      $user->is_subscribed_newsletter        = $this->input->post("newsletters");
+      switch ($user->is_subscribed_newsletter) {
+        case 0:
+          $user->newsletter_frequency="never";
+          break;
+        
+        case 1:
+          $user->newsletter_frequency="all";
+          break;
+      }
+      $data["code"]=200;
+      $data["message"]=$this->UsersModel->register($username);
+      $this->response($data,200);
 
+
+    }
+/*Funciones  de apoyo */
+    
+    function emailToUsername($email)
+    {
+      $raw=str_replace("@", "_", $email);
+      $raw=str_replace(".", "_", $raw);
+      return $raw;
+    }
 
     private function getNameByEmail($email)
     {
@@ -346,5 +380,22 @@ class Users extends REST_Controller {
         {
               return false;
         }
+    }
+
+    private function checkEmail($emailUser)
+    { 
+      $response=false;
+      $parts=explode("@", $emailUser);
+      $emails=$this->UsersModel->getAllEmailFilters();
+      foreach ($emails as $email)
+      {
+      $filter= $email["domain"] ;
+      if ($parts[1]==$filter) 
+      {
+        $response=true;
+        # code...
+      }
+      }
+       return $response;
     }
 }

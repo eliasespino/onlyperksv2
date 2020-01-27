@@ -69,4 +69,18 @@ class UsersModel extends CI_Model {
    
   }
 
+  function getAllEmailFilters()
+  {
+    $this->db->select('*');
+    $q=$this->db->get('email_filter');
+    $response =$q->result_array();
+    return $response;
+  }
+  function register($user)
+  {
+      $this->db->set($user);
+      $response=   $this->db->insert('core_user');
+   return $response;
+  }
+
 }
