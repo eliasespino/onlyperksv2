@@ -335,7 +335,7 @@ class Users extends REST_Controller {
           break;
       }
       $data["code"]=200;
-      $data["message"]=$this->UsersModel->register($username);
+      $data["message"]=$this->UsersModel->register($user);
       $this->response($data,200);
 
 
