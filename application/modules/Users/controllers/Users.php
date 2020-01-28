@@ -359,9 +359,10 @@ class Users extends REST_Controller {
       $parameters=count($this->input->post());
       $terms=$this->input->post("terms");
       $policy=$this->input->post("policy");
+      $p=$this->checkAllRequiredParameters($this->input->post());
       if ($parameters>=8)
       {
-        if ($terms==1 and $policy==1)
+        if ($terms==1 and $policy==1 and $p==true)
         {
             try
                 {
@@ -471,5 +472,17 @@ class Users extends REST_Controller {
       }
       }
        return $response;
+    }
+
+    private function checkAllRequiredParameters($parameters)
+    {
+      $r=true;
+      foreach ($parameters as $parameter) {
+        if (empty($parameter))
+         {
+           $r=false;
+        }
+      }
+      return $r;
     }
 }
