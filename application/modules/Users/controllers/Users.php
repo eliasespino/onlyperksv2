@@ -246,7 +246,7 @@ class Users extends REST_Controller {
         $email=$this->input->post("email");
         $ci =& get_instance();
         if ($this->UsersModel->emailIsValid($email)) {
-           $date = new DateTime();
+            $date = new DateTime();
             $payload['email']        = $email;
             $payload['iat']          = $date->getTimestamp();
             $payload['exp']          = $date->getTimestamp() + 60*60;
@@ -312,33 +312,107 @@ class Users extends REST_Controller {
                 $this->response($data,401);
             }
         }
+        else
+        {
+                $data["message"]="Empty Token";
+                $data["code"]=400;
+                $this->response($data,400);
+        }
+    }
+    public function requestRegister_post()
+    {
+       $data["message"]="";
+       $data["code"]=0; 
+       $email=$this->input->post("email");
+       if($this->checkEmail($email))
+       {
+            $date = new DateTime();
+            $payload['email']        = $email;
+            $payload['iat']          = $date->getTimestamp();
+            $payload['exp']          = $date->getTimestamp() + 60*60;
+            $output['token']         = JWT::encode($payload, $this->secret);
+            $site_url                = site_url('Users/register?token='.$output['token']);
+            $r["message"]            = "Mail sent";
+            $r["code"]               = 200;
+            $sender                  = new Mailing();
+            $correo                  = new stdClass;
+            $correo->from            = "info@collaborativeperks.com";
+            $correo->to              = $email;
+            $correo->subject         = "Register";
+            $correo->token           = $output['token']  ;
+            $r["data"]               = array("mailResponse"=>$sender->sendActivationNotification($correo));
+            $this->response($r,200);
+       }
+       else
+       {
+         $data["message"]="Invalid domian, your email addres is not allow to register in the platform";
+         $data["code"]=401; 
+          $this->response($data,401);
+       }
+       
+
+
     }
     public function register_post()
     {
-      $user                                  = new stdClass;
-      $user->username                        = $this->emailToUsername($this->input->post("email"));
-      $user->email                           = $this->input->post("email");
-      $user->first_name                      = $this->input->post("first_name");
-      $user->last_name                       = $this->input->post("last_name");
-      $user->gender                          = $this->input->post("gender");
-      $user->platform_language               = $this->input->post("platform_language");
-      $user->password                        = hash("sha256",$this->input->post("password"));
-      $user->type                            = "user";
-      $user->is_subscribed_newsletter        = $this->input->post("newsletters");
-      switch ($user->is_subscribed_newsletter) {
-        case 0:
-          $user->newsletter_frequency="never";
-          break;
-        
-        case 1:
-          $user->newsletter_frequency="all";
-          break;
+      $token                                              = $this->input->get("token");
+      $parameters=count($this->input->post());
+      $terms=$this->input->post("terms");
+      $policy=$this->input->post("policy");
+      if ($parameters>=8)
+      {
+        if ($terms==1 and $policy==1)
+        {
+            try
+                {
+                      $tokenData                             = $this->decodeToken($token);
+                      $user                                  = new stdClass;
+                      $user->username                        = $this->emailToUsername($this->input->post("email"));
+                      $user->email                           = $this->input->post("email");
+                      $user->first_name                      = $this->input->post("first_name");
+                      $user->last_name                       = $this->input->post("last_name");
+                      $user->gender                          = $this->input->post("gender");
+                      $user->platform_language               = $this->input->post("platform_language");
+                      $user->password                        = hash("sha256",$this->input->post("password"));
+                      $user->type                            = "user";
+                      $user->is_subscribed_newsletter        = $this->input->post("newsletters");
+                      switch ($user->is_subscribed_newsletter) {
+                        case 0:
+                          $user->newsletter_frequency="never";
+                          break;
+                   
+                        case 1:
+                          $user->newsletter_frequency="all";
+                          break;
+                      }
+                      $data["code"]=200;
+                      $data["message"]=$this->UsersModel->register($user);
+                      $this->response($data,200);
+                } catch (UnexpectedValueException $e) {
+                   $data["code"]=500;
+                   $data["message"]="Invalid Token";
+                   $this->response($data,500);
+                }  
+        }
+        else
+        {
+                 $data["code"]=400;
+                 $data["message"]="You have to agree with our Terms & Policy";
+                 $this->response($data,400);
+        }
+            
       }
-      $data["code"]=200;
-      $data["message"]=$this->UsersModel->register($user);
-      $this->response($data,200);
+      else
+      {
+                 $data["code"]=400;
+                 $data["message"]="Invalid Parameters";
+                 $this->response($data,400);
+      }
+    
+    
+     
 
-
+ $this->response($tokenData,200);
     }
 /*Funciones  de apoyo */
     
@@ -352,7 +426,7 @@ class Users extends REST_Controller {
     private function getNameByEmail($email)
     {
       $user= $this->UsersModel->getNameByEmail($email);
-     return $user[0]["first_name"] ;
+      return $user[0]["first_name"] ;
     }
     private function decodeToken($token)
     {
