@@ -468,7 +468,7 @@ class Users extends REST_Controller {
       if ($parts[1]==$filter) 
       {
         $response=true;
-        # code...
+      
       }
       }
        return $response;
