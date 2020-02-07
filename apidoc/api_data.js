@@ -25,7 +25,7 @@ define({ "api": [
             "type": "json",
             "optional": false,
             "field": "Results",
-            "description": "<p>login information.</p>"
+            "description": "<p>trips cards information.</p>"
           }
         ]
       }

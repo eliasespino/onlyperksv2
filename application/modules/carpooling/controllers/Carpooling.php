@@ -27,7 +27,7 @@ class Carpooling extends REST_Controller {
        * @apiParam offset  pagination
        *
        *
-       * @apiSuccess {json} Results login information.
+       * @apiSuccess {json} Results trips cards information.
        * @apiError {json} Results Failed information.
        */
     function getCards_get()
