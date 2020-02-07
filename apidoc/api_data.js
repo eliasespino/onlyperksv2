@@ -187,6 +187,105 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/Users/register/",
+    "title": "register",
+    "name": "register",
+    "group": "Users",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "token",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "email",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "terms",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "policy",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "first_name",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "last_name",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "gender",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "platform_language",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "newsletter",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n {\n   \"message\": \"User registred\",\n   \"code\": \"200\",\n   \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"message\": \"invalid parameters\",\n  \"code\": \"404\"\n \"data\": \"null\"\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "Results",
+            "description": "<p>Failed information.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/modules/Users/controllers/Users.php",
+    "groupTitle": "Users"
+  },
+  {
+    "type": "post",
     "url": "/Users/requestPassword/",
     "title": "Request user password",
     "name": "requestPassword_post",

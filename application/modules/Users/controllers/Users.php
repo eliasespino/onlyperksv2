@@ -378,6 +378,40 @@ class Users extends REST_Controller {
 
 
     }
+     /**
+       * @api {post} /Users/register/  register 
+       * @apiName register
+       * @apiGroup Users
+       *
+       * @apiParam token 
+       * @apiParam email 
+       * @apiParam terms 
+       * @apiParam policy
+       * @apiParam first_name 
+       * @apiParam last_name 
+       * @apiParam gender 
+       * @apiParam platform_language 
+       * @apiParam newsletter 
+
+       *
+       *
+       * @apiSuccessExample {json} Success-Response:
+       *     HTTP/1.1 200 OK
+       *     {
+       *       "message": "User registred",
+       *       "code": "200",
+       *       "data": {}
+       *    }
+       *
+       * @apiErrorExample Error-Response:
+       *     HTTP/1.1 404 Not Found
+       *     {
+       *       "message": "invalid parameters",
+       *       "code": "404"
+        *      "data": "null"
+       *     }
+       * @apiError {json} Results Failed information.
+       */
     public function register_post()
     {
       $token                                              = $this->input->get("token");
