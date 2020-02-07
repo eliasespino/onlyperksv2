@@ -19,7 +19,17 @@ class Carpooling extends REST_Controller {
     {
             
     }
-
+/**
+       * @api {get} /carpooling/getCards/  getCards
+       * @apiName getCards
+       * @apiGroup Carpooling
+       *
+       * @apiParam offset  pagination
+       *
+       *
+       * @apiSuccess {json} Results login information.
+       * @apiError {json} Results Failed information.
+       */
     function getCards_get()
     {
     	$offset=$this->input->get("offset");
