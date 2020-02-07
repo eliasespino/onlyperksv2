@@ -20,7 +20,7 @@ class Carpooling extends REST_Controller {
             
     }
 /**
-       * @api {get} /carpooling/getCards/  getCards
+       * @api {get} /carpooling/getCards/:offset  getCards
        * @apiName getCards
        * @apiGroup Carpooling
        *
