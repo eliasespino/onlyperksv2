@@ -232,5 +232,56 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "application/modules/Users/controllers/Users.php",
     "groupTitle": "Users"
+  },
+  {
+    "type": "post",
+    "url": "/Users/requestRegister/",
+    "title": "request register",
+    "name": "requestRegister",
+    "group": "Users",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "email",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n {\n   \"message\": \"Password Changed\",\n   \"code\": \"200\",\n   \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"message\": \"invalid email\",\n  \"code\": \"404\"\n \"data\": \"null\"\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "Results",
+            "description": "<p>Failed information.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/modules/Users/controllers/Users.php",
+    "groupTitle": "Users"
   }
 ] });

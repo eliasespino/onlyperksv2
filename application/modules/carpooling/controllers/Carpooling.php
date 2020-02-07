@@ -15,8 +15,9 @@ class Carpooling extends REST_Controller {
         header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
     }
 
-    function index() {
-        
+    function index_get()
+    {
+            
     }
 
     function getCards_get()

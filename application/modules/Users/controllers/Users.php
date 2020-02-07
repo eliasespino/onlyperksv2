@@ -22,8 +22,7 @@ class Users extends REST_Controller {
 
     public function index_get()
     {
-         $r= $this->checkEmail('elias@collaborativeperks.com');
-         $this->response($r,200);
+       
     }
        /**
        * @api {get} /Users/id/:id Get  user information
@@ -319,6 +318,31 @@ class Users extends REST_Controller {
                 $this->response($data,400);
         }
     }
+     /**
+       * @api {post} /Users/requestRegister/ request register 
+       * @apiName requestRegister
+       * @apiGroup Users
+       *
+       * @apiParam email  
+       *
+       *
+       * @apiSuccessExample {json} Success-Response:
+       *     HTTP/1.1 200 OK
+       *     {
+       *       "message": "Password Changed",
+       *       "code": "200",
+       *       "data": {}
+       *    }
+       *
+       * @apiErrorExample Error-Response:
+       *     HTTP/1.1 404 Not Found
+       *     {
+       *       "message": "invalid email",
+       *       "code": "404"
+        *      "data": "null"
+       *     }
+       * @apiError {json} Results Failed information.
+       */
     public function requestRegister_post()
     {
        $data["message"]="";
@@ -347,6 +371,7 @@ class Users extends REST_Controller {
        {
          $data["message"]="Invalid domian, your email addres is not allow to register in the platform";
          $data["code"]=401; 
+         $data["data"]=null; 
           $this->response($data,401);
        }
        
@@ -356,10 +381,10 @@ class Users extends REST_Controller {
     public function register_post()
     {
       $token                                              = $this->input->get("token");
-      $parameters=count($this->input->post());
-      $terms=$this->input->post("terms");
-      $policy=$this->input->post("policy");
-      $p=$this->checkAllRequiredParameters($this->input->post());
+      $parameters                                         = count($this->input->post());
+      $terms                                              = $this->input->post("terms");
+      $policy                                             = $this->input->post("policy");
+      $p                                                  = $this->checkAllRequiredParameters($this->input->post());
       if ($parameters>=8)
       {
         if ($terms==1 and $policy==1 and $p==true)
@@ -367,6 +392,11 @@ class Users extends REST_Controller {
             try
                 {
                       $tokenData                             = $this->decodeToken($token);
+                      if (empty()) {
+                       $data["code"]=400;
+                       $data["message"]="Token Error";
+                       $this->response($data,400);
+                      }
                       $user                                  = new stdClass;
                       $user->username                        = $this->emailToUsername($this->input->post("email"));
                       $user->email                           = $this->input->post("email");
